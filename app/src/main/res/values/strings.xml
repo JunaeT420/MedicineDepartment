@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MedicineDepartment</string>
+    <string name="title_activity_appointment">AppointmentActivity</string>
+</resources>
