@@ -15,6 +15,9 @@ import com.example.user.medicinedepartment.Model.Doctorsinfo;
 import com.example.user.medicinedepartment.interfaces.ApiInterface;
 import com.example.user.medicinedepartment.retrofit.RetrofitApiClient;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,10 +72,11 @@ public Doctorsinfo doctorsinfo;
 public void appointment(View view){
     final LayoutInflater inflater = getLayoutInflater();
     View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
-    final EditText userHouse = (EditText) alertLayout.findViewById(R.id.user_house);
-    final EditText userRoad = (EditText) alertLayout.findViewById(R.id.user_road);
-    final EditText userArea = (EditText) alertLayout.findViewById(R.id.user_ares);
-    final EditText userCity = (EditText) alertLayout.findViewById(R.id.user_city);
+    final EditText userSerial = (EditText) alertLayout.findViewById(R.id.serial);
+    final EditText userName = (EditText) alertLayout.findViewById(R.id.name);
+    final EditText userAddress = (EditText) alertLayout.findViewById(R.id.address);
+    final EditText userNumber= (EditText) alertLayout.findViewById(R.id.number);
+    final EditText userDate = (EditText) alertLayout.findViewById(R.id.time);
 
     AlertDialog.Builder alert = new AlertDialog.Builder(this);
     alert.setTitle("Insert address");
@@ -89,10 +93,83 @@ public void appointment(View view){
     alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            String house = userHouse.getText().toString();
-            String road = userRoad.getText().toString();
-            String area = userArea.getText().toString();
-            String city = userCity.getText().toString();
+            apiInterface = RetrofitApiClient.getClient().create(ApiInterface.class);
+
+            apiInterface.insertUser(
+                    userSerial.getText().toString(),
+                    userName.getText().toString(),
+                    userAddress.getText().toString(),
+                    userNumber.getText().toString(),
+                    userDate.getText().toString(),
+
+                    new Callback<Response>() {
+                        @Override
+                        public void onResponse(Call<Response> call, Response<Response> response) {
+                            BufferedReader reader = null;
+                            String output = "";
+
+                            try {
+                                //Initializing buffered reader
+
+
+                               // reader = new BufferedReader(new InputStreamReader(response.body()..in));
+
+
+                                //Reading the output in the string
+                                output = reader.readLine();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Response> call, Throwable t) {
+
+                        }
+                    }
+                    //Creating an anonymous callback
+                    /*new Callback<Response>() {
+                        @Override
+                        public void success(Response result, Response response) {
+                            //On success we will read the server's output using bufferedreader
+                            //Creating a bufferedreader object
+                            BufferedReader reader = null;
+
+                            //An string to store output from the server
+                            String output = "";
+
+                            try {
+                                //Initializing buffered reader
+                                reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+
+                                //Reading the output in the string
+                                output = reader.readLine();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            //Displaying the output as a toast
+                            Toast.makeText(AppointmentActivity.this, output, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            //If any error occured displaying the error as toast
+                            Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+                        }
+                    }*/
+            );
+
+
+
+
+
+           /* String Serial = userSerial.getText().toString();
+            String Name = userName.getText().toString();
+            String Address = userAddress.getText().toString();
+            String Number = userNumber.getText().toString();
+            String Date = userDate.getText().toString();*/
 
 
 
