@@ -69,16 +69,31 @@
         android:text="Doctor email"
         android:id="@+id/doctor_email"
         />
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="200dp"
+    android:weightSum="2"
+    android:orientation="horizontal"
+    >
 <Button
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Appointment"
     android:onClick="appointment"
-   android:layout_marginTop="200dp"
+ android:layout_weight="1"
     android:layout_gravity="center"
 
     />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Serial"
+        android:layout_weight="1"
+        android:onClick="serial"
+        android:layout_gravity="center"
 
+        />
 
+</LinearLayout>
 </LinearLayout>

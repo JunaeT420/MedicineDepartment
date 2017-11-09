@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.medicinedepartment.Model.AppointDoctor;
 import com.example.user.medicinedepartment.Model.Doctorsinfo;
 import com.example.user.medicinedepartment.interfaces.ApiInterface;
 import com.example.user.medicinedepartment.retrofit.RetrofitApiClient;
@@ -69,10 +70,11 @@ public Doctorsinfo doctorsinfo;
 public void appointment(View view){
     final LayoutInflater inflater = getLayoutInflater();
     View alertLayout = inflater.inflate(R.layout.layout_custom_dialog, null);
-    final EditText userHouse = (EditText) alertLayout.findViewById(R.id.user_house);
-    final EditText userRoad = (EditText) alertLayout.findViewById(R.id.user_road);
-    final EditText userArea = (EditText) alertLayout.findViewById(R.id.user_ares);
-    final EditText userCity = (EditText) alertLayout.findViewById(R.id.user_city);
+    final EditText userSerial = (EditText) alertLayout.findViewById(R.id.serial);
+    final EditText userName = (EditText) alertLayout.findViewById(R.id.name);
+    final EditText userAddress = (EditText) alertLayout.findViewById(R.id.address);
+    final EditText userNumber= (EditText) alertLayout.findViewById(R.id.number);
+    final EditText userDate = (EditText) alertLayout.findViewById(R.id.time);
 
     AlertDialog.Builder alert = new AlertDialog.Builder(this);
     alert.setTitle("Insert address");
@@ -89,21 +91,27 @@ public void appointment(View view){
     alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            String house = userHouse.getText().toString();
-            String road = userRoad.getText().toString();
-            String area = userArea.getText().toString();
-            String city = userCity.getText().toString();
+            apiInterface = RetrofitApiClient.getClient().create(ApiInterface.class);
+            AppointDoctor appointDoctor=new AppointDoctor();
+            appointDoctor.setPatientSerial(userSerial.getText().toString());
+            appointDoctor.setPatientName(userName.getText().toString());
+            appointDoctor.setPatientAddress(userAddress.getText().toString());
+            appointDoctor.setPatientNumber(userNumber.getText().toString());
+            appointDoctor.setPatientDate(userDate.getText().toString());
+            Call<AppointDoctor> call=apiInterface.insertPatientInfo(appointDoctor.getPatientSerial(),appointDoctor.getPatientName(),appointDoctor.getPatientAddress(),appointDoctor.getPatientNumber(),appointDoctor.getPatientDate());
+            call.enqueue(new Callback<AppointDoctor>() {
+                @Override
+                public void onResponse(Call<AppointDoctor> call, Response<AppointDoctor> response) {
+                    Toast.makeText(AppointmentActivity.this, "response"+response, Toast.LENGTH_LONG).show();
 
 
+                }
 
-            Toast.makeText(getBaseContext(), "Cancel clicked"+doctor_Name, Toast.LENGTH_SHORT).show();
-
-       /*  Intent intent=new Intent(MainActivity.this,MapsActivity.class);
-            intent.putExtra("house",house);
-            intent.putExtra("road",road);
-            intent.putExtra("area",area);
-            intent.putExtra("city",city);
-            startActivity(intent);*/
+                @Override
+                public void onFailure(Call<AppointDoctor> call, Throwable t) {
+                    Toast.makeText(AppointmentActivity.this, "response"+t, Toast.LENGTH_LONG).show();
+                }
+            });
 
 
         }
@@ -112,6 +120,14 @@ public void appointment(View view){
     AlertDialog dialog=alert.create();
     dialog.show();
 }
+
+public void serial(View view){
+
+}
+
+
+
+
 
 public void initialize(){
     doctor_Name = (TextView) findViewById(R.id.doctor_name);
